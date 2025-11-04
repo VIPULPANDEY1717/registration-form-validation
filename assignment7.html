@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registration Form Validation</title>
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #89f7fe, #66a6ff);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .container {
+        background: #fff;
+        padding: 30px 40px;
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        width: 350px;
+    }
+
+    h2 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-weight: 600;
+        color: #444;
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0 5px 0;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 15px;
+        outline: none;
+        transition: 0.2s;
+    }
+
+    input:focus {
+        border-color: #2575fc;
+        box-shadow: 0 0 5px rgba(37,117,252,0.3);
+    }
+
+    .instruction {
+        font-size: 12px;
+        color: #555;
+        margin-bottom: 10px;
+    }
+
+    button {
+        width: 100%;
+        background: linear-gradient(135deg, #2575fc, #6a11cb);
+        border: none;
+        padding: 10px;
+        color: #fff;
+        font-size: 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        transform: scale(1.03);
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
+    }
+
+    .error {
+        color: red;
+        font-size: 13px;
+        margin-bottom: 5px;
+    }
+
+    .success {
+        color: green;
+        text-align: center;
+        margin-top: 10px;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Registration Form</h2>
+
+    <form id="regForm" onsubmit="return validateForm()">
+        <label>Name:</label>
+        <input type="text" id="name" placeholder="Enter name">
+        <div class="instruction">* Name must contain only letters and be more than 1 character</div>
+        <div id="nameError" class="error"></div>
+
+        <label>Password:</label>
+        <input type="password" id="password" placeholder="Enter password">
+        <div id="passwordError" class="error"></div>
+
+        <label>Email:</label>
+        <input type="text" id="email" placeholder="Enter email">
+        <div id="emailError" class="error"></div>
+
+        <label>Phone Number:</label>
+        <input type="text" id="phone" placeholder="Enter 10-digit phone number">
+        <div id="phoneError" class="error"></div>
+
+        <button type="submit">Register</button>
+        <div id="successMessage" class="success"></div>
+    </form>
+</div>
+
+<script>
+function validateForm() {
+    let name = document.getElementById("name").value.trim();
+    let password = document.getElementById("password").value.trim();
+    let email = document.getElementById("email").value.trim();
+    let phone = document.getElementById("phone").value.trim();
+
+    let nameError = document.getElementById("nameError");
+    let passwordError = document.getElementById("passwordError");
+    let emailError = document.getElementById("emailError");
+    let phoneError = document.getElementById("phoneError");
+    let successMessage = document.getElementById("successMessage");
+
+    // Clear previous messages
+    nameError.innerText = passwordError.innerText = emailError.innerText = phoneError.innerText = successMessage.innerText = "";
+
+    let valid = true;
+
+    // ✅ UPDATED NAME VALIDATION (no upper limit)
+    let namePattern = /^[A-Za-z]+$/;
+    if (name === "") {
+        nameError.innerText = "Name field cannot be empty.";
+        valid = false;
+    } else if (!name.match(namePattern)) {
+        nameError.innerText = "Name must contain alphabets only.";
+        valid = false;
+    } else if (name.length <= 1) {
+        nameError.innerText = "Name must be more than 1 character.";
+        valid = false;
+    }
+
+    // PASSWORD VALIDATION
+    if (password === "") {
+        passwordError.innerText = "Password cannot be empty.";
+        valid = false;
+    } else if (password.length >= 6) {
+        passwordError.innerText = "Password must be less than 6 characters.";
+        valid = false;
+    }
+
+    // EMAIL VALIDATION
+    let emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,}$/;
+    if (email === "") {
+        emailError.innerText = "Email cannot be empty.";
+        valid = false;
+    } else if (!email.match(emailPattern)) {
+        emailError.innerText = "Enter a valid email (e.g. name@domain.com).";
+        valid = false;
+    }
+
+    // PHONE NUMBER VALIDATION
+    let phonePattern = /^[0-9]{10}$/;
+    if (phone === "") {
+        phoneError.innerText = "Phone number cannot be empty.";
+        valid = false;
+    } else if (!phone.match(phonePattern)) {
+        phoneError.innerText = "Phone number must be exactly 10 digits.";
+        valid = false;
+    }
+
+    // SUCCESS MESSAGE
+    if (valid) {
+        successMessage.innerText = "Registration Successful!";
+        document.getElementById("regForm").reset();
+    }
+
+    return false; // prevent page reload for demo
+}
+</script>
+
+</body>
+</html>
